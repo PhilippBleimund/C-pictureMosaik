@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define printf printw
 #define STEPS 128
@@ -16,15 +17,14 @@ typedef enum { JPG, PNG } img_type;
 /* all strucs used
  */
 typedef struct database_s {
-  FILE fileLink;
   char path[PATH_MAX];
-  char name[PATH_MAX];
+  char *name;
 } database_t;
 
 typedef struct folder_s {
   DIR *directory;
   char path[PATH_MAX];
-  char name[PATH_MAX];
+  char *name;
   bool recursive;
 } folder_t;
 
