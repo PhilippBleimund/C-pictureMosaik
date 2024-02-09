@@ -59,12 +59,19 @@ char *getDatabaseName(int index) {
   }
 }
 
-char *addDatabase(database_t *arr, size_t size, char *str) {
+database_t *addDatabase(database_t *arr, size_t size, char *str) {
   if (size % STEPS == 0) {
     arr = realloc(arr, size + STEPS);
   }
 
   database_t new_database;
+  strcpy(new_database.path, str);
+  new_database.name = strrchr(new_database.path, '/');
+
+  selectedDatabaseFiles[numberDatabases] = new_database;
+  numberDatabases++;
+
+  return &selectedDatabaseFiles[numberDatabases - 1];
 }
 
 /* core user interface functions
