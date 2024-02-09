@@ -121,31 +121,52 @@ int handle_a() {
 
     printf("\n\n");
 
+    char path[PATH_MAX];
+    char r;
+    bool recursive;
+
     switch (c) {
     case 'd':
       printf("insert path to database:\n$ ");
-      char path_database[PATH_MAX];
-      getstr(path_database);
-      addDatabase(path_database);
+      getstr(path);
+      addDatabase(path);
       break;
 
     case 'f':
       printf("insert path to Image Folder:\n$ ");
-      char path_folder[PATH_MAX];
-      getstr(path_folder);
-      printf("include sub directorys?\n n(no)/y(yes): ");
-      char r = getch();
+      getstr(path);
+      printf("include sub directorys?\nn(no)/y(yes): ");
+      r = getch();
 
-      bool recursive = false;
+      recursive = false;
       if (r == 'y')
         recursive = true;
 
-      addFolder(path_folder, recursive);
+      addFolder(path, recursive);
       break;
 
     case 'F':
+      bool continue_folder = true;
+      while (continue_folder) {
+        printf("insert path to Image Folder:\n$ ");
+        getstr(path);
+        printf("include sub directorys?\nn(no)/y(yes): ");
+        r = getch();
 
+        recursive = false;
+        if (r == 'y')
+          recursive = true;
+
+        folder_t *folder = addFolder(path, recursive);
+
+        printf("\nadded folder %s", folder->name);
+        printf("add another folder?\nn(no)/y(yes): ");
+        char a = getch();
+        if (a != 'y')
+          continue_folder = false;
+      }
       break;
+
     case 'i':
 
       break;
