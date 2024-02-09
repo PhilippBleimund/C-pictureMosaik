@@ -80,10 +80,16 @@ int handle_a() {
       getch();
     }
 
+    printf("\n\n");
+
     switch (c) {
     case 'd':
+      printf("insert path to database:\n$ ");
+      char path[PATH_MAX];
+      getstr(path);
 
       break;
+
     case 'f':
 
       break;
