@@ -39,8 +39,17 @@ char *getDatabaseName(int index) {
   if (numberDatabases == 0) {
     return default_str;
   } else {
-    return currentDatabaseFile[index].name;
+    return selectedDatabaseFiles[index].name;
   }
+}
+
+char *addFile_t(file_t *arr, size_t size, char *str) {
+  if (size % STEPS == 0) {
+    arr = realloc(arr, size + STEPS);
+  }
+
+  file_t new_File;
+  new_File.
 }
 
 /* core user interface functions
