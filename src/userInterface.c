@@ -47,19 +47,55 @@ char *getDatabaseName(int index) {
  */
 
 int handle_a() {
-  clear();
-  printf("====add Database, Images or Folder====\n");
-  printf("current number of Databases: %d\n", numberDatabases);
-  printf("current number of Image Folders %d\n", numberImageFolders);
-  printf("current number of Images %d\n", numberImages);
-  printf("\n~~~~~options~~~~~\n");
-  printf("d -> add Database\n");
-  printf("f -> add Image Folder\n");
-  printf("F -> add multiple Folders\n");
-  printf("i -> add single Image\n");
-  printf("I -> add multiple Images\n");
-  printf("q -> qiut menu\n");
-  printf("\n your selection: ");
+
+  bool exitMenu = false;
+
+  while (exitMenu == false) {
+    clear();
+    printf("====add Database, Images or Folder====\n");
+    printf("current number of Databases: %d\n", numberDatabases);
+    printf("current number of Image Folders %d\n", numberImageFolders);
+    printf("current number of Images %d\n", numberImages);
+    printf("\n~~~~~options~~~~~\n");
+    printf("d -> add Database\n");
+    printf("f -> add Image Folder\n");
+    printf("F -> add multiple Folders\n");
+    printf("i -> add single Image\n");
+    printf("I -> add multiple Images\n");
+    printf("q -> qiut menu\n");
+    printf("\n your selection: ");
+
+    char c = getch();
+    if (c == EOF) {
+      printf("error try again\npress any key to continue...");
+      getch();
+    }
+
+    switch (c) {
+    case 'd':
+
+      break;
+    case 'f':
+
+      break;
+    case 'F':
+
+      break;
+    case 'i':
+
+      break;
+    case 'I':
+
+      break;
+    case 'q':
+
+      break;
+    default:
+      printf("sorry this option is not available. Try again.\npress any key to "
+             "continue...");
+      getch();
+    }
+  }
 }
 
 /* Main method
