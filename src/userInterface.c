@@ -77,9 +77,9 @@ int handle_a() {
   while (exitMenu == false) {
     clear();
     printf("====add Database, Images or Folder====\n");
-    printf("current number of Databases: %d\n", numberDatabases);
-    printf("current number of Image Folders %d\n", numberImageFolders);
-    printf("current number of Images %d\n", numberImages);
+    printf("current number of Databases: %zu\n", numberDatabases);
+    printf("current number of Image Folders %zu\n", numberImageFolders);
+    printf("current number of Images %zu\n", numberImages);
     printf("\n~~~~~options~~~~~\n");
     printf("d -> add Database\n");
     printf("f -> add Image Folder\n");
