@@ -12,5 +12,5 @@ else
 endif
 
 build: src/userInterface.c
-	gcc src/userInterface.c -o src/userInterface.ck $(flags)
+	gcc src/userInterface.c -o src/userInterface $(flags)
 	cd src && $(preRun)userInterface$(ending)	

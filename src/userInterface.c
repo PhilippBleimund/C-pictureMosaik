@@ -3,8 +3,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ncurses.h>
-#include <limits.h>
-#include <string.h>
+
+
+
+#define printf printw
+
 
 typedef struct {
   FILE fileLink;
@@ -15,33 +18,43 @@ typedef struct {
 file_t currentDatabaseFile[20];
 int numberDatabases = 0;
 
+char default_str[17] = "nothing selected";
+
 char* getDatabaseName(int index){
-  char name[PATH_MAX];
 
   if(numberDatabases == 0){
-    strcpy(name, "nothing selected");
+    return default_str;
   }else{
-     strcpy(name, currentDatabaseFile[index].name);
+     return currentDatabaseFile[index].name;
  }
-
-  return name;
 }
 
 
-int main(int argc, char *argv[]){
+int main(void){
+
+  printf("test1\n");
 
   initscr();
+  scrollok(stdscr, TRUE);
 
   while (true){
     clear();
-    printw("======status=======");
-    printw("current selected database: %s", getDatabaseName(0));
+    printf("======status=======\n");
+    printf("current selected database: %s", getDatabaseName(0));
     
-  }
+    char c = getch();
+    if (c == EOF)
+      printf("error try again");
 
-  int c = getchar();
-  if (c != EOF)
-    printf("%c\n", c);
+    switch (c) {
+      case 'a':
+        printf("Youve entered the char a");
+    }
+
+    getch();
+  }
+  
+  endwin();
 
   return EXIT_SUCCESS;
 }
