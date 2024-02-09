@@ -5,20 +5,29 @@
 #include <stdlib.h>
 
 #define printf printw
+#define STEPS 128
 
 /* Struct used for storing multiple file links
  */
-typedef struct {
+struct file_s {
   FILE fileLink;
   char path[PATH_MAX];
   char name[PATH_MAX];
-} file_t;
+  bool recusive;
+} file_default = {NULL, "/nothing/", "nothing selected", false};
+typedef struct file_s file_t;
 
 /* Global Variables
  */
 
-file_t currentDatabaseFile[20];
+file_t currentDatabaseFile[STEPS];
 int numberDatabases = 0;
+
+file_t *selectedImageFolders;
+int numberImageFolders = 0;
+
+file_t *selectedImages;
+int numberImages = 0;
 
 char default_str[17] = "nothing selected";
 
@@ -39,14 +48,16 @@ char *getDatabaseName(int index) {
 
 int main(void) {
 
-  printf("test1\n");
+  /* Init all variables */
+  selectedImageFolders = malloc(sizeof(file_t) * STEPS);
+  selectedImages = malloc(sizeof(file_t) * STEPS);
 
   initscr();
   scrollok(stdscr, TRUE);
 
-  bool keeprunning = true;
+  bool keepRunning = true;
 
-  while (keeprunning) {
+  while (keepRunning) {
     clear();
     printf("======status=======\n");
     printf("current selected database: %s\n", getDatabaseName(0));
@@ -61,7 +72,7 @@ int main(void) {
     case 'a':
       printf("Youve entered the char a");
     case 'd':
-      keeprunning = false;
+      keepRunning = false;
     }
 
     getch();
