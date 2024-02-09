@@ -22,7 +22,6 @@ typedef struct database_s {
 } database_t;
 
 typedef struct folder_s {
-  DIR *directory;
   char path[PATH_MAX];
   char *name;
   bool recursive;
@@ -59,9 +58,10 @@ char *getDatabaseName(int index) {
   }
 }
 
-database_t *addDatabase(database_t *arr, size_t size, char *str) {
-  if (size % STEPS == 0) {
-    arr = realloc(arr, size + STEPS);
+database_t *addDatabase(char *str) {
+  if (numberDatabases % STEPS == 0) {
+    selectedDatabaseFiles = realloc(
+        selectedDatabaseFiles, sizeof(database_t) * (numberDatabases + STEPS));
   }
 
   database_t new_database;
@@ -72,6 +72,23 @@ database_t *addDatabase(database_t *arr, size_t size, char *str) {
   numberDatabases++;
 
   return &selectedDatabaseFiles[numberDatabases - 1];
+}
+
+folder_t *addFolder(char *str, bool rec) {
+  if (numberImageFolders % STEPS == 0) {
+    selectedImageFolders = realloc(
+        selectedImageFolders, sizeof(folder_t) * (numberImageFolders + STEPS));
+  }
+
+  folder_t new_folder;
+  strcpy(new_folder.path, str);
+  new_folder.name = strrchr(new_folder.path, '/');
+  new_folder.recursive = rec;
+
+  selectedImageFolders[numberImageFolders] = new_folder;
+  numberImageFolders++;
+
+  return &selectedImageFolders[numberImageFolders - 1];
 }
 
 /* core user interface functions
@@ -107,14 +124,25 @@ int handle_a() {
     switch (c) {
     case 'd':
       printf("insert path to database:\n$ ");
-      char path[PATH_MAX];
-      getstr(path);
-
+      char path_database[PATH_MAX];
+      getstr(path_database);
+      addDatabase(path_database);
       break;
 
     case 'f':
+      printf("insert path to Image Folder:\n$ ");
+      char path_folder[PATH_MAX];
+      getstr(path_folder);
+      printf("include sub directorys?\n n(no)/y(yes): ");
+      char r = getch();
 
+      bool recursive = false;
+      if (r == 'y')
+        recursive = true;
+
+      addFolder(path_folder, recursive);
       break;
+
     case 'F':
 
       break;
@@ -125,7 +153,7 @@ int handle_a() {
 
       break;
     case 'q':
-
+      exitMenu = true;
       break;
     default:
       printf("sorry this option is not available. Try again.\npress any key to "
@@ -133,6 +161,8 @@ int handle_a() {
       getch();
     }
   }
+
+  return EXIT_SUCCESS;
 }
 
 /* Main method
