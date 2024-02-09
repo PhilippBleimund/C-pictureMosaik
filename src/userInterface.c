@@ -104,6 +104,7 @@ int handle_a() {
 int main(void) {
 
   /* Init all variables */
+  selectedDatabaseFiles = malloc(sizeof(file_t) * STEPS);
   selectedImageFolders = malloc(sizeof(file_t) * STEPS);
   selectedImages = malloc(sizeof(file_t) * STEPS);
 
