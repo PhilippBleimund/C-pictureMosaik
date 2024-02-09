@@ -20,14 +20,14 @@ typedef struct file_s file_t;
 /* Global Variables
  */
 
-file_t currentDatabaseFile[STEPS];
-int numberDatabases = 0;
+file_t *selectedDatabaseFiles;
+size_t numberDatabases = 0;
 
 file_t *selectedImageFolders;
-int numberImageFolders = 0;
+size_t numberImageFolders = 0;
 
 file_t *selectedImages;
-int numberImages = 0;
+size_t numberImages = 0;
 
 char default_str[17] = "nothing selected";
 
@@ -139,6 +139,11 @@ int main(void) {
   }
 
   endwin();
+
+  /* free all dynamic variables */
+  free(selectedDatabaseFiles);
+  free(selectedImageFolders);
+  free(selectedImages);
 
   return EXIT_SUCCESS;
 }
