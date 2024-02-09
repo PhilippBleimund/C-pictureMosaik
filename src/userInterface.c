@@ -1,3 +1,4 @@
+#include <dirent.h>
 #include <linux/limits.h>
 #include <ncurses.h>
 #include <stdbool.h>
@@ -7,26 +8,41 @@
 #define printf printw
 #define STEPS 128
 
-/* Struct used for storing multiple file links
+/* all enums
  */
-struct file_s {
+
+typedef enum { JPG, PNG } img_type;
+
+/* all strucs used
+ */
+typedef struct database_s {
   FILE fileLink;
   char path[PATH_MAX];
   char name[PATH_MAX];
-  bool recusive;
-} file_default = {NULL, "/nothing/", "nothing selected", false};
-typedef struct file_s file_t;
+} database_t;
+
+typedef struct folder_s {
+  DIR *directory;
+  char path[PATH_MAX];
+  char name[PATH_MAX];
+  bool recursive;
+} folder_t;
+
+typedef struct img_s {
+  char path[PATH_MAX];
+  img_type type;
+} img_t;
 
 /* Global Variables
  */
 
-file_t *selectedDatabaseFiles;
+database_t *selectedDatabaseFiles;
 size_t numberDatabases = 0;
 
-file_t *selectedImageFolders;
+folder_t *selectedImageFolders;
 size_t numberImageFolders = 0;
 
-file_t *selectedImages;
+img_t *selectedImages;
 size_t numberImages = 0;
 
 char default_str[17] = "nothing selected";
@@ -43,13 +59,12 @@ char *getDatabaseName(int index) {
   }
 }
 
-char *addFile_t(file_t *arr, size_t size, char *str) {
+char *addDatabase(database_t *arr, size_t size, char *str) {
   if (size % STEPS == 0) {
     arr = realloc(arr, size + STEPS);
   }
 
-  file_t new_File;
-  new_File.
+  database_t new_database;
 }
 
 /* core user interface functions
@@ -119,9 +134,9 @@ int handle_a() {
 int main(void) {
 
   /* Init all variables */
-  selectedDatabaseFiles = malloc(sizeof(file_t) * STEPS);
-  selectedImageFolders = malloc(sizeof(file_t) * STEPS);
-  selectedImages = malloc(sizeof(file_t) * STEPS);
+  selectedDatabaseFiles = malloc(sizeof(database_t) * STEPS);
+  selectedImageFolders = malloc(sizeof(folder_t) * STEPS);
+  selectedImages = malloc(sizeof(img_t) * STEPS);
 
   initscr();
   scrollok(stdscr, TRUE);
