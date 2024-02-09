@@ -58,6 +58,7 @@ int handle_a() {
   printf("F -> add multiple Folders\n");
   printf("i -> add single Image\n");
   printf("I -> add multiple Images\n");
+  printf("q -> qiut menu\n");
   printf("\n your selection: ");
 }
 
