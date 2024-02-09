@@ -61,6 +61,11 @@ int main(void) {
     clear();
     printf("======status=======\n");
     printf("current selected database: %s\n", getDatabaseName(0));
+    printf("\n~~~~~~options~~~~~~\n");
+    printf("a -> add a Database, Images or Folders\n");
+    printf("e -> edit your selected Databases, Images or Folders\n");
+    printf("r -> create new render job");
+    printf("c -> create new Database");
 
     char c = getch();
     if (c == EOF) {
@@ -70,7 +75,7 @@ int main(void) {
 
     switch (c) {
     case 'a':
-      printf("Youve entered the char a");
+      handle_a();
     case 'd':
       keepRunning = false;
     }
