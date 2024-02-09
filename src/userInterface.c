@@ -43,6 +43,24 @@ char *getDatabaseName(int index) {
   }
 }
 
+/* core user interface functions
+ */
+
+int handle_a() {
+  clear();
+  printf("====add Database, Images or Folder====\n");
+  printf("current number of Databases: %d\n", numberDatabases);
+  printf("current number of Image Folders %d\n", numberImageFolders);
+  printf("current number of Images %d\n", numberImages);
+  printf("\n~~~~~options~~~~~\n");
+  printf("d -> add Database\n");
+  printf("f -> add Image Folder\n");
+  printf("F -> add multiple Folders\n");
+  printf("i -> add single Image\n");
+  printf("I -> add multiple Images\n");
+  printf("\n your selection: ");
+}
+
 /* Main method
  */
 
