@@ -91,6 +91,27 @@ folder_t *addFolder(char *str, bool rec) {
   return &selectedImageFolders[numberImageFolders - 1];
 }
 
+img_t *addImage(char *str) {
+  if (numberImages % STEPS == 0) {
+    selectedImages =
+        realloc(selectedImages, sizeof(img_t) * (numberImages + STEPS));
+  }
+
+  img_t new_image;
+  strcpy(new_image.path, str);
+  char *type_str = strrchr(new_image.path, '.');
+  if (strcmp(type_str, "png") == 0 || strcmp(type_str, "PNG") == 0) {
+    new_image.type = PNG;
+  } else if (strcmp(type_str, "jpg") == 0 || strcmp(type_str, "JPG") == 0) {
+    new_image.type = JPG;
+  }
+
+  selectedImages[numberImages] = new_image;
+  numberImages++;
+
+  return &selectedImages[numberImages - 1];
+}
+
 /* core user interface functions
  */
 
@@ -124,6 +145,7 @@ int handle_a() {
     char path[PATH_MAX];
     char r;
     bool recursive;
+    bool continue_loop;
 
     switch (c) {
     case 'd':
@@ -133,7 +155,7 @@ int handle_a() {
       break;
 
     case 'f':
-      printf("insert path to Image Folder:\n$ ");
+      printf("insert path to image folder:\n$ ");
       getstr(path);
       printf("include sub directorys?\nn(no)/y(yes): ");
       r = getch();
@@ -146,9 +168,9 @@ int handle_a() {
       break;
 
     case 'F':
-      bool continue_folder = true;
-      while (continue_folder) {
-        printf("insert path to Image Folder:\n$ ");
+      continue_loop = true;
+      while (continue_loop) {
+        printf("insert path to image folder:\n$ ");
         getstr(path);
         printf("include sub directorys?\nn(no)/y(yes): ");
         r = getch();
@@ -163,16 +185,32 @@ int handle_a() {
         printf("add another folder?\nn(no)/y(yes): ");
         char a = getch();
         if (a != 'y')
-          continue_folder = false;
+          continue_loop = false;
       }
       break;
 
     case 'i':
-
+      printf("insert path to single image:\n$ ");
+      getstr(path);
+      addImage(path);
       break;
+
     case 'I':
+      continue_loop = true;
+      while (continue_loop) {
+        printf("insert path to single image:\n$ ");
+        getstr(path);
 
+        img_t *folder = addImage(path);
+
+        printf("\nadded %s image", (folder->type == PNG) ? "png" : "jpg");
+        printf("add another imgage?\nn(no)/y(yes): ");
+        char a = getch();
+        if (a != 'y')
+          continue_loop = false;
+      }
       break;
+
     case 'q':
       exitMenu = true;
       break;
