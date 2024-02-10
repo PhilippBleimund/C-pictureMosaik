@@ -12,5 +12,6 @@ else
 endif
 
 build: src/userInterface.c
-	gcc src/userInterface.c -o src/userInterface $(flags)
-	cd src && $(preRun)userInterface$(ending)	
+	mkdir build
+	gcc src/userInterface.c -o build/userInterface.out $(flags)
+	cd build && $(preRun)userInterface$(ending)	
