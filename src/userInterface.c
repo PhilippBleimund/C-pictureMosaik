@@ -118,6 +118,13 @@ img_t *addImage(char *str) {
 int handle_a() {
 
   bool exitMenu = false;
+  char lastAction_str[6][50] = {"",
+                                "added database",
+                                "added image folder",
+                                "added multiple folders",
+                                "added single image",
+                                "added multiple images"};
+  int lastAction = 0;
 
   while (exitMenu == false) {
     clear();
@@ -132,7 +139,8 @@ int handle_a() {
     printf("i -> add single Image\n");
     printf("I -> add multiple Images\n");
     printf("q -> qiut menu\n");
-    printf("\n your selection: ");
+    printf("last action: %s\n", lastAction_str[lastAction]);
+    printf("\nyour selection: ");
 
     char c = getch();
     if (c == EOF) {
@@ -152,6 +160,7 @@ int handle_a() {
       printf("insert path to database:\n$ ");
       getstr(path);
       addDatabase(path);
+      lastAction = 1;
       break;
 
     case 'f':
@@ -165,6 +174,7 @@ int handle_a() {
         recursive = true;
 
       addFolder(path, recursive);
+      lastAction = 2;
       break;
 
     case 'F':
@@ -187,12 +197,15 @@ int handle_a() {
         if (a != 'y')
           continue_loop = false;
       }
+      lastAction = 3;
       break;
 
     case 'i':
       printf("insert path to single image:\n$ ");
       getstr(path);
       addImage(path);
+      lastAction = 4;
+
       break;
 
     case 'I':
@@ -203,12 +216,13 @@ int handle_a() {
 
         img_t *folder = addImage(path);
 
-        printf("\nadded %s image", (folder->type == PNG) ? "png" : "jpg");
+        printf("\nadded %s image\n", (folder->type == PNG) ? "png" : "jpg");
         printf("add another imgage?\nn(no)/y(yes): ");
         char a = getch();
         if (a != 'y')
           continue_loop = false;
       }
+      lastAction = 5;
       break;
 
     case 'q':
@@ -258,6 +272,7 @@ int main(void) {
     switch (c) {
     case 'a':
       handle_a();
+      break;
     case 'd':
       keepRunning = false;
     }
