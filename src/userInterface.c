@@ -14,6 +14,8 @@
 
 typedef enum { JPG, PNG } img_type;
 
+enum struct_type { database, folder, img };
+
 /* all strucs used
  */
 typedef struct database_s {
@@ -64,11 +66,10 @@ database_t *addDatabase(char *str) {
         selectedDatabaseFiles, sizeof(database_t) * (numberDatabases + STEPS));
   }
 
-  database_t new_database;
-  strcpy(new_database.path, str);
-  new_database.name = strrchr(new_database.path, '/');
+  strcpy(selectedDatabaseFiles[numberDatabases].path, str);
+  selectedDatabaseFiles[numberDatabases].name =
+      strrchr(selectedDatabaseFiles[numberDatabases].path, '/');
 
-  selectedDatabaseFiles[numberDatabases] = new_database;
   numberDatabases++;
 
   return &selectedDatabaseFiles[numberDatabases - 1];
@@ -238,10 +239,12 @@ int handle_a() {
   return EXIT_SUCCESS;
 }
 
-void selectionMenu(void *arr, size_t length) {
+void selectionMenu_database(database_t *arr, size_t length) {
 
   int yMax, xMax;
   getmaxyx(stdscr, yMax, xMax);
+
+  clear();
 
   // create a window
   WINDOW *menuwin = newwin(yMax - 2, xMax - 2, 1, 1);
@@ -249,8 +252,66 @@ void selectionMenu(void *arr, size_t length) {
   refresh();
   wrefresh(menuwin);
 
+  // create variables
+  int choice;
+  int curr_pos = 0;
+  int top_pos = 0;
+  bool exit_menu = false;
+
   // enable user input
   keypad(menuwin, true);
+
+  // generate display
+  char **selection_total = malloc(sizeof(char *) * length);
+  for (size_t i = 0; i < length; i++) {
+    // calculate string length
+    // "[ ] %s in path: %s", name, path
+    size_t str_length = strlen(arr[i].name) + strlen(arr[i].path);
+    char *str = malloc(sizeof(char) * str_length + 15);
+    snprintf(str, str_length + 15, "[ ] %s in path: %s", arr[i].name,
+             arr[i].path);
+    selection_total[i] = str;
+  }
+
+  while (exit_menu == false) {
+    for (int i = 0; i < (yMax - 4); i++) {
+      if ((i + top_pos) > length - 1)
+        break;
+      if (i == curr_pos)
+        wattron(menuwin, A_REVERSE);
+      mvwprintw(menuwin, i + 1, 1, "%s", selection_total[i + top_pos]);
+      wattroff(menuwin, A_REVERSE);
+    }
+    choice = wgetch(menuwin);
+
+    switch (choice) {
+    case KEY_UP:
+      curr_pos--;
+      if (curr_pos == -1) {
+        curr_pos = 0;
+        top_pos--;
+        if (top_pos == -1) {
+          top_pos = 0;
+        }
+      }
+      break;
+    case KEY_DOWN:
+      curr_pos++;
+      if (curr_pos > (yMax - 3)) {
+        curr_pos = yMax - 3;
+        top_pos++;
+      }
+      if (curr_pos >= length) {
+        curr_pos = length - 1;
+      }
+      break;
+    case 10:
+      exit_menu = true;
+      break;
+    default:
+      break;
+    }
+  }
 
   getch();
 }
@@ -259,7 +320,7 @@ void handle_e() {
 
   bool exitMenu = false;
 
-  while (exitMenu == false) {
+  do {
     clear();
     printf("=======edit========");
     printf("current number of Databases: %zu\n", numberDatabases);
@@ -275,7 +336,7 @@ void handle_e() {
     char c = getch();
     switch (c) {
     case 'd':
-      selectionMenu(selectedDatabaseFiles, numberDatabases);
+      selectionMenu_database(selectedDatabaseFiles, numberDatabases);
       break;
 
     case 'f':
@@ -294,7 +355,7 @@ void handle_e() {
              "continue...");
       getch();
     }
-  }
+  } while (exitMenu == false);
 }
 
 /* Main method
