@@ -15,4 +15,8 @@ endif
 build: src/userInterface.c
 	mkdir -p build
 	gcc src/userInterface.c -o build/userInterface.out $(flags)
-	cd build && $(preRun)userInterface$(ending)	
+	cd build && $(preRun)userInterface$(ending)
+
+debug: src/userInterface.c
+	mkdir -p build
+	gcc --debug src/userInterface.c -o build/userInterface $(flags)
