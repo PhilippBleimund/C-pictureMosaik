@@ -238,6 +238,47 @@ int handle_a() {
   return EXIT_SUCCESS;
 }
 
+void handle_e() {
+
+  bool exitMenu = false;
+
+  while (exitMenu == false) {
+    printf("=======edit========");
+    printf("current number of Databases: %zu\n", numberDatabases);
+    printf("current number of Image Folders %zu\n", numberImageFolders);
+    printf("current number of Images %zu\n", numberImages);
+    printf("~~~~~~options~~~~~~\n");
+    printf("d -> show all databases\n");
+    printf("f -> show all folders\n");
+    printf("i -> show all images\n");
+    printf("q -> quit menu\n");
+    printf("\nyour selection: ");
+
+    char c = getch();
+    switch (c) {
+    case 'd':
+
+      break;
+
+    case 'f':
+
+      break;
+
+    case 'i':
+
+      break;
+
+    case 'q':
+      exitMenu = true;
+      break;
+    default:
+      printf("sorry this option is not available. Try again.\npress any key to "
+             "continue...");
+      getch();
+    }
+  }
+}
+
 /* Main method
  */
 
@@ -260,8 +301,8 @@ int main(void) {
     printf("\n~~~~~~options~~~~~~\n");
     printf("a -> add a Database, Images or Folders\n");
     printf("e -> edit your selected Databases, Images or Folders\n");
-    printf("r -> create new render job");
-    printf("c -> create new Database");
+    printf("r -> create new render job\n");
+    printf("c -> create new Database\n");
 
     char c = getch();
     if (c == EOF) {
@@ -272,6 +313,9 @@ int main(void) {
     switch (c) {
     case 'a':
       handle_a();
+      break;
+    case 'e':
+      handle_e();
       break;
     case 'd':
       keepRunning = false;
