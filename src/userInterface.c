@@ -303,6 +303,7 @@ int main(void) {
     printf("e -> edit your selected Databases, Images or Folders\n");
     printf("r -> create new render job\n");
     printf("c -> create new Database\n");
+    printf("q -> quit programm");
 
     char c = getch();
     if (c == EOF) {
