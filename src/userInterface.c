@@ -238,26 +238,44 @@ int handle_a() {
   return EXIT_SUCCESS;
 }
 
+void selectionMenu(void *arr, size_t length) {
+
+  int yMax, xMax;
+  getmaxyx(stdscr, yMax, xMax);
+
+  // create a window
+  WINDOW *menuwin = newwin(yMax - 2, xMax - 2, 1, 1);
+  box(menuwin, 0, 0);
+  refresh();
+  wrefresh(menuwin);
+
+  // enable user input
+  keypad(menuwin, true);
+
+  getch();
+}
+
 void handle_e() {
 
   bool exitMenu = false;
 
   while (exitMenu == false) {
+    clear();
     printf("=======edit========");
     printf("current number of Databases: %zu\n", numberDatabases);
     printf("current number of Image Folders %zu\n", numberImageFolders);
     printf("current number of Images %zu\n", numberImages);
     printf("~~~~~~options~~~~~~\n");
-    printf("d -> show all databases\n");
-    printf("f -> show all folders\n");
-    printf("i -> show all images\n");
+    printf("d -> edit databases\n");
+    printf("f -> edit folders\n");
+    printf("i -> edit images\n");
     printf("q -> quit menu\n");
     printf("\nyour selection: ");
 
     char c = getch();
     switch (c) {
     case 'd':
-
+      selectionMenu(selectedDatabaseFiles, numberDatabases);
       break;
 
     case 'f':
