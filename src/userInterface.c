@@ -20,12 +20,12 @@ enum struct_type { database, folder, img };
  */
 typedef struct database_s {
   char path[PATH_MAX];
-  char *name;
+  char name[PATH_MAX];
 } database_t;
 
 typedef struct folder_s {
   char path[PATH_MAX];
-  char *name;
+  char name[PATH_MAX];
   bool recursive;
 } folder_t;
 
@@ -67,12 +67,14 @@ database_t *addDatabase(char *str) {
   }
 
   strcpy(selectedDatabaseFiles[numberDatabases].path, str);
-  selectedDatabaseFiles[numberDatabases].name =
-      strrchr(selectedDatabaseFiles[numberDatabases].path, '/');
 
-  if (selectedDatabaseFiles[numberDatabases].name == NULL)
-    selectedDatabaseFiles[numberDatabases].name =
-        selectedDatabaseFiles[numberDatabases].path;
+  char *index = strrchr(selectedDatabaseFiles[numberDatabases].path, '/');
+
+  if (index == NULL)
+    strcpy(selectedDatabaseFiles[numberDatabases].name,
+           selectedDatabaseFiles[numberDatabases].path);
+  else
+    strcpy(selectedDatabaseFiles[numberDatabases].name, index + 1);
 
   numberDatabases++;
 
@@ -85,12 +87,17 @@ folder_t *addFolder(char *str, bool rec) {
         selectedImageFolders, sizeof(folder_t) * (numberImageFolders + STEPS));
   }
 
-  folder_t new_folder;
-  strcpy(new_folder.path, str);
-  new_folder.name = strrchr(new_folder.path, '/');
-  new_folder.recursive = rec;
+  strcpy(selectedImageFolders[numberImageFolders].path, str);
 
-  selectedImageFolders[numberImageFolders] = new_folder;
+  char *index = strrchr(selectedImageFolders[numberImageFolders].path, '/');
+
+  if (index == NULL) {
+    strcpy(selectedImageFolders[numberImageFolders].name,
+           selectedImageFolders[numberImageFolders].path);
+  } else {
+    strcpy(selectedImageFolders[numberImageFolders].name, index + 1);
+  }
+
   numberImageFolders++;
 
   return &selectedImageFolders[numberImageFolders - 1];
