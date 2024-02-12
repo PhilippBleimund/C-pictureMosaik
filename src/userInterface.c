@@ -274,6 +274,9 @@ void selectionMenu_database(database_t *arr, size_t length) {
 
   // generate display
   bool *user_selection = malloc(sizeof(bool) * length);
+  for (int i = 0; i < length; i++) {
+    user_selection[i] = false;
+  }
 
   while (exit_menu == false) {
 
@@ -352,6 +355,112 @@ void selectionMenu_database(database_t *arr, size_t length) {
   free(user_selection);
 }
 
+void selectionMenu_folder(folder_t *arr, size_t length) {
+
+  int yMax, xMax;
+  getmaxyx(stdscr, yMax, xMax);
+
+  clear();
+
+  // create a window
+  WINDOW *menuwin = newwin(yMax - 2, xMax - 2, 1, 1);
+  box(menuwin, 0, 0);
+  refresh();
+  wrefresh(menuwin);
+
+  // create variables
+  int choice;
+  int curr_pos = 0;
+  int top_pos = 0;
+  bool exit_menu = false;
+
+  // enable user input
+  keypad(menuwin, true);
+
+  // generate display
+  bool *user_selection = malloc(sizeof(bool) * length);
+  for (int i = 0; i < length; i++) {
+    user_selection[i] = false;
+  }
+
+  while (exit_menu == false) {
+
+    wclear(menuwin);
+    box(menuwin, 0, 0);
+
+    // print menu information
+    mvwprintw(menuwin, 0, 2, "d Delete");
+    mvwprintw(menuwin, 0, 11, "q Quit");
+
+    for (int i = 0; i < (yMax - 4); i++) {
+      if ((i + top_pos) <= length - 1) {
+        if (i == curr_pos)
+          wattron(menuwin, A_REVERSE);
+        mvwprintw(menuwin, i + 1, 1, "[%c] %s; recursive: %s",
+                  user_selection[i + top_pos] == true ? 'X' : ' ',
+                  arr[i + top_pos].path,
+                  (arr[i + top_pos].recursive == true) ? "yes" : "no");
+        wattroff(menuwin, A_REVERSE);
+      } else {
+        mvwprintw(menuwin, i + 1, 1, " ");
+      }
+    }
+    choice = wgetch(menuwin);
+
+    switch (choice) {
+    case KEY_UP:
+      curr_pos--;
+      if (curr_pos == -1) {
+        curr_pos = 0;
+        top_pos--;
+        if (top_pos == -1) {
+          top_pos = 0;
+        }
+      }
+      break;
+    case KEY_DOWN:
+      curr_pos++;
+      if (curr_pos >= (yMax - 4)) {
+        curr_pos = yMax - 5;
+        top_pos++;
+        if (top_pos + (yMax - 4) > length) {
+          top_pos--;
+        }
+      }
+      if (curr_pos >= length) {
+        curr_pos = length - 1;
+      }
+      break;
+    case 10:
+      if (user_selection[curr_pos + top_pos] == false)
+        user_selection[curr_pos + top_pos] = true;
+      else
+        user_selection[curr_pos + top_pos] = false;
+      break;
+    case 'd':
+      for (size_t i = 0; i < length; i++) {
+        if (user_selection[i] == true) {
+          user_selection[i] = false;
+          for (size_t j = i; j < length - 1; j++) {
+            arr[j] = arr[j + 1];
+          }
+          length--;
+        }
+      }
+      break;
+    case 'q':
+      exit_menu = true;
+      break;
+    default:
+      break;
+    }
+  }
+
+  numberImageFolders = length;
+
+  free(user_selection);
+}
+
 void handle_e() {
 
   bool exitMenu = false;
@@ -376,7 +485,7 @@ void handle_e() {
       break;
 
     case 'f':
-
+      selectionMenu_folder(selectedImageFolders, numberImageFolders);
       break;
 
     case 'i':
