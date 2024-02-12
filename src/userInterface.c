@@ -273,16 +273,7 @@ void selectionMenu_database(database_t *arr, size_t length) {
   keypad(menuwin, true);
 
   // generate display
-  char **selection_total = malloc(sizeof(char *) * length);
   bool *user_selection = malloc(sizeof(bool) * length);
-  for (size_t i = 0; i < length; i++) {
-    // calculate string length
-    // "[ ] %s in path: %s", name, path
-    size_t str_length = strlen(arr[i].name) + strlen(arr[i].path);
-    char *str = malloc(sizeof(char) * str_length + 12);
-    snprintf(str, str_length + 15, "%s in path: %s", arr[i].name, arr[i].path);
-    selection_total[i] = str;
-  }
 
   while (exit_menu == false) {
 
@@ -298,9 +289,9 @@ void selectionMenu_database(database_t *arr, size_t length) {
         break;
       if (i == curr_pos)
         wattron(menuwin, A_REVERSE);
-      mvwprintw(menuwin, i + 1, 1, "[%c] %s",
+      mvwprintw(menuwin, i + 1, 1, "[%c] %s in path: %s",
                 user_selection[i + top_pos] == true ? 'X' : ' ',
-                selection_total[i + top_pos]);
+                arr[i + top_pos].name, arr[i + top_pos].path);
       wattroff(menuwin, A_REVERSE);
     }
     choice = wgetch(menuwin);
@@ -338,9 +329,13 @@ void selectionMenu_database(database_t *arr, size_t length) {
     case 'd':
       for (size_t i = 0; i < length; i++) {
         if (user_selection[i] == true) {
-          for (size_t j = i; j < length)
+          for (size_t j = i; j < length - 1; j++) {
+            arr[j] = arr[j + 1];
+          }
+          length--;
         }
       }
+      break;
     case 'q':
       exit_menu = true;
       break;
@@ -348,6 +343,8 @@ void selectionMenu_database(database_t *arr, size_t length) {
       break;
     }
   }
+
+  numberDatabases = length;
 
   free(selection_total);
   free(user_selection);
