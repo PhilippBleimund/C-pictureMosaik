@@ -328,6 +328,12 @@ void selectionMenu_database(database_t *arr, size_t length) {
       else
         user_selection[curr_pos + top_pos] = false;
       break;
+    case 'd':
+      for (size_t i = 0; i < length; i++) {
+        if (user_selection[i] == true) {
+          for (size_t j = i; j < length)
+        }
+      }
     case 'q':
       exit_menu = true;
       break;
