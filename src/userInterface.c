@@ -398,6 +398,18 @@ int main(void) {
   selectedImageFolders = malloc(sizeof(folder_t) * STEPS);
   selectedImages = malloc(sizeof(img_t) * STEPS);
 
+  selectedDatabaseFiles[0].name = "test1";
+  selectedDatabaseFiles[1].name = "test2";
+  selectedDatabaseFiles[2].name = "test3";
+  selectedDatabaseFiles[3].name = "test4";
+  selectedDatabaseFiles[4].name = "test5";
+  selectedDatabaseFiles[5].name = "test6";
+  selectedDatabaseFiles[6].name = "test7";
+  selectedDatabaseFiles[7].name = "test8";
+  selectedDatabaseFiles[8].name = "test9";
+  selectedDatabaseFiles[9].name = "test10";
+  numberDatabases = 10;
+
   initscr();
   scrollok(stdscr, TRUE);
 
