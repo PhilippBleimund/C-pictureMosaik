@@ -282,6 +282,10 @@ void selectionMenu_database(database_t *arr, size_t length) {
     clear();
     box(menuwin, 0, 0);
 
+    // print menu information
+    mvwprintw(menuwin, 0, 2, "d Delete");
+    mvwprintw(menuwin, 0, 11, "q Quit");
+
     for (int i = 0; i < (yMax - 4); i++) {
       if ((i + top_pos) > length - 1)
         break;
@@ -332,7 +336,8 @@ void selectionMenu_database(database_t *arr, size_t length) {
     }
   }
 
-  getch();
+  free(selection_total);
+  free(user_selection);
 }
 
 void handle_e() {
