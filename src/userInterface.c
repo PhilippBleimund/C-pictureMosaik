@@ -504,7 +504,7 @@ void selectionMenu_imgage(img_t *arr, size_t length) {
           wattron(menuwin, A_REVERSE);
         mvwprintw(menuwin, i + 1, 1, "[%c] image in: %s",
                   user_selection[i + top_pos] == true ? 'X' : ' ',
-                  arr[i+top_pos].path;
+                  arr[i + top_pos].path);
         wattroff(menuwin, A_REVERSE);
       } else {
         mvwprintw(menuwin, i + 1, 1, " ");
