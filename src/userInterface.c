@@ -70,6 +70,10 @@ database_t *addDatabase(char *str) {
   selectedDatabaseFiles[numberDatabases].name =
       strrchr(selectedDatabaseFiles[numberDatabases].path, '/');
 
+  if (selectedDatabaseFiles[numberDatabases].name == NULL)
+    selectedDatabaseFiles[numberDatabases].name =
+        selectedDatabaseFiles[numberDatabases].path;
+
   numberDatabases++;
 
   return &selectedDatabaseFiles[numberDatabases - 1];
