@@ -277,7 +277,7 @@ void selectionMenu_database(database_t *arr, size_t length) {
 
   while (exit_menu == false) {
 
-    clear();
+    wclear(menuwin);
     box(menuwin, 0, 0);
 
     // print menu information
@@ -285,14 +285,16 @@ void selectionMenu_database(database_t *arr, size_t length) {
     mvwprintw(menuwin, 0, 11, "q Quit");
 
     for (int i = 0; i < (yMax - 4); i++) {
-      if ((i + top_pos) > length - 1)
-        break;
-      if (i == curr_pos)
-        wattron(menuwin, A_REVERSE);
-      mvwprintw(menuwin, i + 1, 1, "[%c] %s in path: %s",
-                user_selection[i + top_pos] == true ? 'X' : ' ',
-                arr[i + top_pos].name, arr[i + top_pos].path);
-      wattroff(menuwin, A_REVERSE);
+      if ((i + top_pos) <= length - 1) {
+        if (i == curr_pos)
+          wattron(menuwin, A_REVERSE);
+        mvwprintw(menuwin, i + 1, 1, "[%c] %s in path: %s",
+                  user_selection[i + top_pos] == true ? 'X' : ' ',
+                  arr[i + top_pos].name, arr[i + top_pos].path);
+        wattroff(menuwin, A_REVERSE);
+      } else {
+        mvwprintw(menuwin, i + 1, 1, " ");
+      }
     }
     choice = wgetch(menuwin);
 
@@ -329,6 +331,7 @@ void selectionMenu_database(database_t *arr, size_t length) {
     case 'd':
       for (size_t i = 0; i < length; i++) {
         if (user_selection[i] == true) {
+          user_selection[i] = false;
           for (size_t j = i; j < length - 1; j++) {
             arr[j] = arr[j + 1];
           }
@@ -346,7 +349,6 @@ void selectionMenu_database(database_t *arr, size_t length) {
 
   numberDatabases = length;
 
-  free(selection_total);
   free(user_selection);
 }
 
