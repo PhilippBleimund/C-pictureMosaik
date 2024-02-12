@@ -461,7 +461,7 @@ void selectionMenu_folder(folder_t *arr, size_t length) {
   free(user_selection);
 }
 
-void selectionMenu_imgage(img_t *arr, size_t length) {
+void selectionMenu_image(img_t *arr, size_t length) {
 
   int yMax, xMax;
   getmaxyx(stdscr, yMax, xMax);
@@ -565,6 +565,7 @@ void selectionMenu_imgage(img_t *arr, size_t length) {
 
   free(user_selection);
 }
+
 void handle_e() {
 
   bool exitMenu = false;
@@ -593,7 +594,7 @@ void handle_e() {
       break;
 
     case 'i':
-
+      selectionMenu_image(selectedImages, numberImages);
       break;
 
     case 'q':
