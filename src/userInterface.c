@@ -267,23 +267,29 @@ void selectionMenu_database(database_t *arr, size_t length) {
 
   // generate display
   char **selection_total = malloc(sizeof(char *) * length);
+  bool *user_selection = malloc(sizeof(bool) * length);
   for (size_t i = 0; i < length; i++) {
     // calculate string length
     // "[ ] %s in path: %s", name, path
     size_t str_length = strlen(arr[i].name) + strlen(arr[i].path);
-    char *str = malloc(sizeof(char) * str_length + 15);
-    snprintf(str, str_length + 15, "[ ] %s in path: %s", arr[i].name,
-             arr[i].path);
+    char *str = malloc(sizeof(char) * str_length + 12);
+    snprintf(str, str_length + 15, "%s in path: %s", arr[i].name, arr[i].path);
     selection_total[i] = str;
   }
 
   while (exit_menu == false) {
+
+    clear();
+    box(menuwin, 0, 0);
+
     for (int i = 0; i < (yMax - 4); i++) {
       if ((i + top_pos) > length - 1)
         break;
       if (i == curr_pos)
         wattron(menuwin, A_REVERSE);
-      mvwprintw(menuwin, i + 1, 1, "%s", selection_total[i + top_pos]);
+      mvwprintw(menuwin, i + 1, 1, "[%c] %s",
+                user_selection[i + top_pos] == true ? 'X' : ' ',
+                selection_total[i + top_pos]);
       wattroff(menuwin, A_REVERSE);
     }
     choice = wgetch(menuwin);
@@ -301,15 +307,24 @@ void selectionMenu_database(database_t *arr, size_t length) {
       break;
     case KEY_DOWN:
       curr_pos++;
-      if (curr_pos > (yMax - 3)) {
-        curr_pos = yMax - 3;
+      if (curr_pos >= (yMax - 4)) {
+        curr_pos = yMax - 5;
         top_pos++;
+        if (top_pos + (yMax - 4) > length) {
+          top_pos--;
+        }
       }
       if (curr_pos >= length) {
         curr_pos = length - 1;
       }
       break;
     case 10:
+      if (user_selection[curr_pos + top_pos] == false)
+        user_selection[curr_pos + top_pos] = true;
+      else
+        user_selection[curr_pos + top_pos] = false;
+      break;
+    case 'q':
       exit_menu = true;
       break;
     default:
