@@ -659,6 +659,8 @@ int main(void) {
     case 'e':
       handle_e();
       break;
+    case 'c':
+      handle_c();
     case 'q':
       keepRunning = false;
     }
