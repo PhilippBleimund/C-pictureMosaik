@@ -1,4 +1,5 @@
 #include <dirent.h>
+#include <inttypes.h>
 #include <linux/limits.h>
 #include <ncurses.h>
 #include <stdbool.h>
@@ -36,6 +37,8 @@ typedef struct img_s {
 
 /* Global Variables
  */
+
+size_t total_images_count = 0;
 
 database_t *selectedDatabaseFiles;
 size_t numberDatabases = 0;
@@ -606,6 +609,107 @@ void handle_e() {
       getch();
     }
   } while (exitMenu == false);
+}
+
+#define DIM(x) (sizeof(x) / sizeof(*(x)))
+
+static const char *sizes[] = {"EiB", "PiB", "TiB", "GiB", "MiB", "KiB", "B"};
+static const uint64_t exbibytes =
+    1024ULL * 1024ULL * 1024ULL * 1024ULL * 1024ULL * 1024ULL;
+
+char *calculateSize(uint64_t size) {
+  char *result = (char *)malloc(sizeof(char) * 20);
+  uint64_t multiplier = exbibytes;
+  int i;
+
+  for (i = 0; i < DIM(sizes); i++, multiplier /= 1024) {
+    if (size < multiplier)
+      continue;
+    if (size % multiplier == 0)
+      sprintf(result, "%" PRIu64 " %s", size / multiplier, sizes[i]);
+    else
+      sprintf(result, "%.1f %s", (float)size / multiplier, sizes[i]);
+    return result;
+  }
+  strcpy(result, "0");
+  return result;
+}
+
+typedef struct Data_s {
+  unsigned int avg_color;
+  unsigned int histogramm_BW[255];
+  unsigned int histogramm_red[255];
+  unsigned int histogramm_green[255];
+  unsigned int histogramm_blue[255];
+  char img_path[PATH_MAX];
+} Data_all_t;
+
+void handle_c() {
+
+  char choice_complexity_str[4][10] = {"automatic", "low", "medium", "extreme"};
+  int choice_complextity = 0;
+
+  char save_path[PATH_MAX];
+  bool BW_enable = false;
+  bool HS_enable = false;
+
+  bool exitMenu = false;
+
+  while (exitMenu == false) {
+    printf("======create Database=======");
+    printf("current ouput path: %s\n", save_path);
+    printf("average color method: %s\n",
+           choice_complexity_str[choice_complextity]);
+    printf("black and white: %s\n", BW_enable ? "true" : "false");
+    printf("include histogramm data: %s\n", HS_enable ? "true" : "enable");
+    printf("predicted size of databse: %s\n",
+           calculateSize(sizeof(Data_all_t) * total_images_count));
+    printf("~~~~~options~~~~~\n");
+    printf("p -> set current output path\n");
+    printf("m -> set complexity\n");
+    printf("b -> turn on black and white\n");
+    printf("h -> include hisogramm data\n");
+    printf("\nyour selection: ");
+
+    char c = getch();
+    switch (c) {
+    case 'p':
+      printf("\ninsert output path:\n$ ");
+      getstr(save_path);
+      break;
+    case 'm':
+      printf("\nautomatic(0): selects between the other option automaticly for "
+             "every image\n");
+      printf("low(1): uses only every 20th pixel\n");
+      printf("medium(2): uses only every 10th pixel\n");
+      printf("extreme(3): uses every pixel\n");
+      printf("your selction: ");
+      char cm = getch();
+      if (cm <= 3) {
+        choice_complextity = cm;
+      }
+      break;
+    case 'b':
+      printf("\ndo you want to calculate the values for the black and white "
+             "representation of the image?\n[y/N]:");
+      char cb = getch();
+      if (cb == 'y') {
+        BW_enable = true;
+      } else {
+        BW_enable = false;
+      }
+      break;
+    case 'h':
+      printf("do you want to pre calculate hisogram data? It will use the same "
+             "complexity\n[y/N]:");
+      char ch = getch();
+      if (ch == 'y') {
+        HS_enable = true;
+      } else {
+        HS_enable = false;
+      }
+    }
+  }
 }
 
 /* Main method
