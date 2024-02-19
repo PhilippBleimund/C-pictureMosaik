@@ -669,6 +669,7 @@ void handle_c() {
     printf("m -> set complexity\n");
     printf("b -> turn on black and white\n");
     printf("h -> include hisogramm data\n");
+    printf("s -> start render\n");
     printf("\nyour selection: ");
 
     char c = getch();
@@ -707,6 +708,12 @@ void handle_c() {
         HS_enable = true;
       } else {
         HS_enable = false;
+      }
+    case 's':
+      printf("\ndo you want to continue. This can take a while\n[y/N]");
+      char cs = getch();
+      if (cs == 'y') {
+        // insert function
       }
     }
   }
