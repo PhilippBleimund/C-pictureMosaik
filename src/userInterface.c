@@ -635,7 +635,7 @@ char *calculateSize(uint64_t size) {
   return result;
 }
 
-typedef struct Data_s {
+typedef struct Data_all_s {
   unsigned int avg_color;
   unsigned int histogramm_BW[255];
   unsigned int histogramm_red[255];
