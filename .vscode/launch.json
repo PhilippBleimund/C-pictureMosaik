@@ -9,7 +9,7 @@
       "stopAtEntry": false,
       "externalConsole": false,
       "cwd": "/home/philippbleimund/git/C-pictureMosaik/src",
-      "program": "/home/philippbleimund/git/C-pictureMosaik/src/build/Debug/outDebug",
+      "program": "/home/philippbleimund/git/C-pictureMosaik/src/build/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
