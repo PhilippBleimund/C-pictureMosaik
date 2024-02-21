@@ -625,6 +625,7 @@ void handle_c() {
   bool exitMenu = false;
 
   while (exitMenu == false) {
+    clear();
     printf("======create Database=======");
     printf("current ouput path: %s\n", save_path);
     printf("average color method: %s\n",
@@ -632,7 +633,7 @@ void handle_c() {
     printf("black and white: %s\n", BW_enable ? "true" : "false");
     printf("include histogramm data: %s\n", HS_enable ? "true" : "enable");
     printf("predicted size of databse: %s\n",
-           calculateSize(sizeof(Data_all_t) * total_images_count));
+           calculateSize(12000 * total_images_count));
     printf("~~~~~options~~~~~\n");
     printf("p -> set current output path\n");
     printf("m -> set complexity\n");
