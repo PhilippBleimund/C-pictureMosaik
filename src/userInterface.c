@@ -679,13 +679,50 @@ void handle_c() {
       } else {
         HS_enable = false;
       }
+      break;
     case 's':
       printf("\ndo you want to continue. This can take a while\n[y/N]");
       char cs = getch();
       if (cs == 'y') {
-        // insert function
+        int numPaths = numberImages;
+        char **paths = malloc(sizeof(char *) * numPaths);
+        for (int i = 0; i < numPaths; i++) {
+          paths[i] = selectedImages->path;
+        }
+
+        int index_newDatabase = generateNewDatabase(paths, numPaths);
+        saveDatabase(index_newDatabase, save_path);
+
+        free(paths);
       }
+      break;
+    case 'q':
+      exitMenu = true;
     }
+  }
+}
+
+void handle_r() {
+
+  char choice_complexity_str[4][10] = {"automatic", "low", "medium", "extreme"};
+  int complexity_choice = 0;
+  bool exitMenu = false;
+  char main_image_path[PATH_MAX];
+  int columns = 10;
+  int rows = 10;
+
+  while (exitMenu == false) {
+    printf("======render=======\n");
+    printf("current image path: %s\n", main_image_path);
+    printf("column dividion: %d\n", columns);
+    printf("row division: %d\n", rows);
+    printf("scale method: %s\n", choice_complexity_str[complexity_choice]);
+    printf("~~~~~~options~~~~~~\n");
+    printf("p -> set image path\n");
+    printf("c -> set columns\n");
+    printf("r -> set rows\n");
+    printf("m -> set scale method\n");
+    printf("s -> start render\n");
   }
 }
 
@@ -742,6 +779,10 @@ int main(void) {
       break;
     case 'c':
       handle_c();
+      break;
+    case 'r':
+      handle_r();
+      break;
     case 'q':
       keepRunning = false;
     }
