@@ -786,5 +786,11 @@ int main(void) {
   free(selectedImageFolders);
   free(selectedImages);
 
+  for (int i = 0; i < totalDatabases; i++) {
+    free(allDatabases[i]);
+  }
+  free(allDatabases);
+  free(Databases_lengths);
+
   return EXIT_SUCCESS;
 }
