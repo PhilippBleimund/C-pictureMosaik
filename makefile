@@ -6,17 +6,24 @@ ifdef OS
 else
    ifeq ($(shell uname), Linux)
       RM = rm -f -r
-      flags := -lncurses
+      flags := -lncurses -lm
 			ending := .out
       preRun := ./
    endif
 endif
 
-build: src/userInterface.c
-	mkdir -p build
-	gcc src/userInterface.c -o build/userInterface.out $(flags)
+libs := src/lib/progressbar.c src/lib/statusbar.c
+
+objects := src/userInterface.c src/image.c src/database.c
+
+run: all 
 	cd build && $(preRun)userInterface$(ending)
 
-debug: src/userInterface.c
+all: 
 	mkdir -p build
-	gcc --debug src/userInterface.c -o build/userInterface $(flags)
+	gcc $(objects) $(libs) -o build/userInterface.out -Wall $(flags)
+	
+
+debug:
+	mkdir -p build
+	gcc --debug $(objects) $(libs) -o build/outDebug -Wall $(flags)
