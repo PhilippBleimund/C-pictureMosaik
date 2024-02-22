@@ -144,3 +144,6 @@ void Image_to_Data_t(const Image *img, Data_all_t *data) {
   data->avg_color = rgb;
   data->avg_BW = BW_bin / img->size;
 }
+
+void Image_to_sections(const Image *img, const Image **sections, int sections_x,
+                       int sections_y) {}
