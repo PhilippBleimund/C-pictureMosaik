@@ -1,6 +1,7 @@
 #include "image.h"
 #include "utils.h"
 #include <math.h>
+#include <stdlib.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image/stb_image.h"
@@ -145,5 +146,55 @@ void Image_to_Data_t(const Image *img, Data_all_t *data) {
   data->avg_BW = BW_bin / img->size;
 }
 
-void Image_to_sections(const Image *img, const Image **sections, int sections_x,
-                       int sections_y) {}
+void Image_to_sections(const Image *img, const Image **sections,
+                       unsigned int sections_x, unsigned int sections_y) {
+
+  ON_ERROR_EXIT(!(img->allocation_ != NO_ALLOCATION),
+                "The input image is not allocated");
+
+  // calculate the average size of one split
+  int split_size_x = 0;
+  int split_size_y = 0;
+  if (sections_x > 0)
+    split_size_x = img->width / sections_x;
+  if (sections_y > 0)
+    split_size_y = img->height / sections_y;
+
+  // calculate the rest since we use integer instead of float
+  int rest_x = img->width - (split_size_x * sections_x);
+  int rest_y = img->height - (split_size_y * sections_y);
+
+  // initialise arrays for the redistribution of pixels
+  int *sections_x_size = malloc(sizeof(int) * sections_x);
+  int *sections_y_size = malloc(sizeof(int) * sections_y);
+
+  // create arrays to use for creating unique indicies
+  int *random_indices_x = malloc(sizeof(int) * sections_x);
+  int *random_indices_y = malloc(sizeof(int) * sections_y);
+  for (int i = 0; i < sections_x; i++) {
+    random_indices_x[i] = i;
+    sections_x_size[i] = split_size_x;
+  }
+  for (int i = 0; i < sections_y; i++) {
+    random_indices_y[i] = i;
+    sections_y_size[i] = split_size_y;
+  }
+
+  // randomize indicies
+  shuffle_array(random_indices_x, sections_x);
+  shuffle_array(random_indices_y, sections_y);
+
+  // use the randomizes indicies to increase selected sections
+  for (int i = 0; i < rest_x; i++) {
+    sections_x_size[random_indices_x[i]]++;
+  }
+  for (int i = 0; i < rest_y; i++) {
+    sections_y_size[random_indices_y[i]]++;
+  }
+
+  // free unused space
+  free(random_indices_x);
+  free(random_indices_y);
+
+  // split the input image into multiple sections
+}
