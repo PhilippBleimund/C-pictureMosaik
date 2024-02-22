@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "lib/progressbar.h"
 #include <unistd.h>
 
 #include "database.h"
@@ -708,6 +707,7 @@ void handle_r() {
   int complexity_choice = 0;
   bool exitMenu = false;
   char main_image_path[PATH_MAX];
+  char save_path[PATH_MAX];
   int columns = 10;
   int rows = 10;
 
@@ -723,6 +723,20 @@ void handle_r() {
     printf("r -> set rows\n");
     printf("m -> set scale method\n");
     printf("s -> start render\n");
+    printf("\nyour selection: ");
+
+    char c = getch();
+    switch (c) {
+    case 'p':
+      printf("\ninput image path:\n$ ");
+      getstr(main_image_path);
+      break;
+    case 'P':
+      printf("\ninput save pathj:\n$ ");
+      getstr(save_path);
+      break;
+    case 's':
+    }
   }
 }
 
