@@ -198,10 +198,10 @@ void Image_to_sections(const Image *img, Image **sections,
   free(random_indices_y);
 
   // split the input image into multiple sections
+  int start_x = 0;
   for (int i = 0; i < sections_y; i++) {
-    int start_x = 0;
+    int start_y = 0;
     for (int j = 0; j < sections_x; j++) {
-      int start_y = 0;
 
       Image *curr_section = &sections[j][i];
       curr_section->height = sections_y_size[i];
