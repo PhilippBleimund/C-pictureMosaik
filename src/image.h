@@ -34,4 +34,4 @@ void Image_to_gray(const Image *orig, Image *gray);
 void Image_to_sepia(const Image *orig, Image *sepia);
 void Image_to_Data_t(const Image *img, Data_all_t *data);
 void Image_to_sections(const Image *img, const Image **sections, int sections_x,
-                       int sections_y)
+                       int sections_y);
