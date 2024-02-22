@@ -15,6 +15,15 @@
     }                                                                          \
   } while (0)
 
+static void shuffle_array(int *arr, const int length) {
+  for (int i = length - 1; i > 0; i--) {
+    int index = (random() % (length));
+    int a = arr[index];
+    arr[index] = arr[i];
+    arr[i] = a;
+  }
+}
+
 // returns how many paths survived the purge
 static int remove_invalid_paths(char **path, int length) {
   for (int i = 0; i < length; i++) {
