@@ -1,5 +1,6 @@
 #include "image.h"
 #include "utils.h"
+#include <cstdlib>
 #include <math.h>
 #include <stdlib.h>
 
@@ -146,7 +147,7 @@ void Image_to_Data_t(const Image *img, Data_all_t *data) {
   data->avg_BW = BW_bin / img->size;
 }
 
-void Image_to_sections(const Image *img, const Image **sections,
+void Image_to_sections(const Image *img, Image **sections,
                        unsigned int sections_x, unsigned int sections_y) {
 
   ON_ERROR_EXIT(!(img->allocation_ != NO_ALLOCATION),
@@ -197,4 +198,26 @@ void Image_to_sections(const Image *img, const Image **sections,
   free(random_indices_y);
 
   // split the input image into multiple sections
+  for (int i = 0; i < sections_y; i++) {
+    int start_x = 0;
+    for (int j = 0; j < sections_x; j++) {
+      int start_y = 0;
+
+      Image *curr_section = &sections[j][i];
+      curr_section->height = sections_y_size[i];
+      curr_section->width = sections_x_size[j];
+      curr_section->channels = img->channels;
+      curr_section->size = curr_section->height * curr_section->width;
+      curr_section->data =
+          malloc(sizeof(char) * curr_section->channels * curr_section->size);
+
+      for (int y = 0; y < sections_y_size[i]; y++) {
+        for (int x = 0; x < sections_x_size[j]; x++) {
+          curr_section->data[4 * (y * sections_x_size[j] + x)] =
+              img->data[4 *
+                        ((y + start_y) * sections_x_size[j] + (x + start_x))];
+        }
+      }
+    }
+  }
 }
